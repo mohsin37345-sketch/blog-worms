@@ -24,7 +24,7 @@ export const LEGAL_LINKS = [
 ] as const;
 
 export const SOCIAL_LINKS = [
-  { label: 'Twitter', href: 'https://twitter.com/blogworms', icon: 'twitter' },
+  { label: 'Twitter', href: 'https://twitter.com/blogwormsuk', icon: 'twitter' },
   { label: 'Pinterest', href: 'https://www.pinterest.com/blogwormsuk/', icon: 'pinterest' },
   { label: 'LinkedIn', href: 'https://linkedin.com/company/blogworms', icon: 'linkedin' },
 ] as const;
