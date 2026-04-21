@@ -8,16 +8,16 @@ const currentPath = Astro.url.pathname;
 <header class="sticky top-0 z-50 bg-white/90 backdrop-blur-lg border-b border-surface-200/50 safe-top" id="site-header">
   <nav class="container-blog flex items-center justify-between h-14 md:h-16" aria-label="Main navigation">
     <!-- Logo -->
-    <a href="/" class="flex items-center gap-2 group min-h-[44px]" id="site-logo">
+    <a href="/" class="flex items-center gap-2.5 group min-h-[44px]" id="site-logo">
       <img
         src="/images/blog-worms-logo.png"
         alt="Blog Worms Logo"
-        width="32"
-        height="32"
-        class="rounded-lg transition-transform group-hover:scale-110"
+        width="48"
+        height="48"
+        class="w-12 h-12 md:w-[52px] md:h-[52px] rounded-xl transition-transform group-hover:scale-110"
       />
-      <span class="text-base font-extrabold tracking-tight text-surface-900">
-        Blog<span class="gradient-text">Worms</span>
+      <span class="text-lg font-extrabold tracking-tight" style="letter-spacing: -0.02em;">
+        <span style="color: #1e3a8a;">Blog</span><span style="color: #dc2626;">Worms</span>
       </span>
     </a>
 

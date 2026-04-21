@@ -67,9 +67,13 @@ const fullCanonical = canonical.startsWith('http') ? canonical : `${siteUrl}${ca
   <link rel="alternate" hreflang={link.lang} href={`${siteUrl}${link.href}`} />
 ))}
 
-<!-- Favicon -->
-<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-<meta name="theme-color" content="#6366f1" />
+<!-- Favicon & Icons -->
+<link rel="icon" type="image/png" href="/images/blog-worms-logo.png" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+<link rel="icon" type="image/png" sizes="192x192" href="/images/blog-worms-logo.png" />
+<meta name="theme-color" content="#1e3a8a" />
+<meta name="msapplication-TileColor" content="#1e3a8a" />
+<meta name="msapplication-TileImage" content="/images/blog-worms-logo.png" />
 
 <!-- Google Fonts -->
 <link rel="preconnect" href="https://fonts.googleapis.com" />
