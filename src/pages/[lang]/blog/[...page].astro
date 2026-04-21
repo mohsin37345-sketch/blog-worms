@@ -1,0 +1,69 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import BlogGrid from '@/components/BlogGrid.astro';
+import Pagination from '@/components/Pagination.astro';
+import Breadcrumbs from '@/components/Breadcrumbs.astro';
+import { getCollection } from 'astro:content';
+import { POSTS_PER_PAGE } from '@/data/site';
+import { useTranslations, type Lang } from '@/i18n/utils';
+
+export async function getStaticPaths() {
+  const locales = ['es', 'fr', 'de', 'ar'] as const;
+  const allPosts = await getCollection('blog', ({ data }) => !data.draft);
+  const sortedPosts = allPosts.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+  const totalPages = Math.ceil(sortedPosts.length / POSTS_PER_PAGE);
+
+  const paths = [];
+
+  for (const lang of locales) {
+    // Page 1
+    paths.push({
+      params: { lang, page: undefined },
+      props: {
+        lang,
+        posts: sortedPosts.slice(0, POSTS_PER_PAGE),
+        currentPage: 1,
+        totalPages,
+      },
+    });
+
+    // Pages 2+
+    for (let i = 2; i <= totalPages; i++) {
+      const start = (i - 1) * POSTS_PER_PAGE;
+      paths.push({
+        params: { lang, page: i.toString() },
+        props: {
+          lang,
+          posts: sortedPosts.slice(start, start + POSTS_PER_PAGE),
+          currentPage: i,
+          totalPages,
+        },
+      });
+    }
+  }
+
+  return paths;
+}
+
+const { lang, posts, currentPage, totalPages } = Astro.props;
+const t = useTranslations(lang as Lang);
+---
+
+<BaseLayout
+  title={`${t('blog.title')} | Blog Worms`}
+  description="Browse the latest trending blog posts from Blog Worms."
+  lang={lang}
+>
+  <div class="container-blog py-10 md:py-14">
+    <Breadcrumbs items={[{ label: t('blog.title'), href: `/${lang}/blog/` }]} />
+
+    <div class="text-center mb-10">
+      <h1 class="text-3xl md:text-4xl font-extrabold text-surface-900 mb-3">
+        {t('home.latest')}
+      </h1>
+    </div>
+
+    <BlogGrid posts={posts} />
+    <Pagination currentPage={currentPage} totalPages={totalPages} baseUrl={`/${lang}/blog`} />
+  </div>
+</BaseLayout>

@@ -1,0 +1,97 @@
+---
+import '@/styles/global.css';
+import Header from '@/components/Header.astro';
+import Footer from '@/components/Footer.astro';
+import SEOHead from '@/components/SEOHead.astro';
+import SchemaOrg from '@/components/SchemaOrg.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  canonical?: string;
+  image?: string;
+  type?: 'website' | 'article';
+  publishedDate?: string;
+  modifiedDate?: string;
+  author?: string;
+  noindex?: boolean;
+  lang?: string;
+  schema?: {
+    type: 'website' | 'blogPosting' | 'faq' | 'organization' | 'breadcrumb';
+    data?: Record<string, unknown>;
+  }[];
+}
+
+const {
+  title,
+  description,
+  canonical,
+  image,
+  type = 'website',
+  publishedDate,
+  modifiedDate,
+  author,
+  noindex = false,
+  lang = 'en',
+  schema = [],
+} = Astro.props;
+
+const isRtl = lang === 'ar';
+---
+
+<!DOCTYPE html>
+<html lang={lang} dir={isRtl ? 'rtl' : 'ltr'} class="scroll-smooth">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="generator" content={Astro.generator} />
+
+  <SEOHead
+    title={title}
+    description={description}
+    canonical={canonical}
+    image={image}
+    type={type}
+    publishedDate={publishedDate}
+    modifiedDate={modifiedDate}
+    author={author}
+    noindex={noindex}
+  />
+
+  <!-- Schema.org Structured Data -->
+  <SchemaOrg type="organization" />
+  {schema.map((s) => (
+    <SchemaOrg type={s.type} data={s.data} />
+  ))}
+
+  <!-- AdSense Slot (add your code after approval) -->
+  <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXX" crossorigin="anonymous"></script> -->
+</head>
+<body class="min-h-screen flex flex-col bg-surface-50 text-surface-800 antialiased">
+  <Header />
+
+  <main class="flex-1" id="main-content">
+    <slot />
+  </main>
+
+  <Footer />
+
+  <!-- Scroll animations -->
+  <script>
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+          }
+        });
+      },
+      { threshold: 0.1, rootMargin: '0px 0px -50px 0px' }
+    );
+
+    document.querySelectorAll('.animate-on-scroll').forEach((el) => {
+      observer.observe(el);
+    });
+  </script>
+</body>
+</html>

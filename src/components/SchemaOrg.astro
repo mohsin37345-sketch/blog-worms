@@ -1,0 +1,121 @@
+---
+interface Props {
+  type: 'website' | 'blogPosting' | 'faq' | 'organization' | 'breadcrumb';
+  data?: Record<string, unknown>;
+}
+
+const { type, data = {} } = Astro.props;
+const siteUrl = 'https://blogworms.co.uk';
+
+function buildSchema() {
+  switch (type) {
+    case 'organization':
+      return {
+        '@context': 'https://schema.org',
+        '@type': 'Organization',
+        name: 'Blog Worms',
+        url: siteUrl,
+        logo: `${siteUrl}/images/blog-worms-logo.png`,
+        description: 'Your go-to source for the latest viral and trending blogs in the UK.',
+        sameAs: [
+          'https://twitter.com/blogworms',
+          'https://facebook.com/blogworms',
+          'https://linkedin.com/company/blogworms',
+        ],
+        contactPoint: {
+          '@type': 'ContactPoint',
+          email: 'mohsin37345@gmail.com',
+          contactType: 'customer service',
+        },
+      };
+
+    case 'website':
+      return {
+        '@context': 'https://schema.org',
+        '@type': 'WebSite',
+        name: 'Blog Worms',
+        url: siteUrl,
+        description: 'Your go-to source for the latest viral and trending blogs in the UK.',
+        publisher: {
+          '@type': 'Organization',
+          name: 'Blog Worms',
+          logo: {
+            '@type': 'ImageObject',
+            url: `${siteUrl}/images/blog-worms-logo.png`,
+          },
+        },
+        potentialAction: {
+          '@type': 'SearchAction',
+          target: `${siteUrl}/blog/?q={search_term_string}`,
+          'query-input': 'required name=search_term_string',
+        },
+      };
+
+    case 'blogPosting':
+      return {
+        '@context': 'https://schema.org',
+        '@type': 'BlogPosting',
+        headline: data.title,
+        description: data.description,
+        image: data.image ? `${siteUrl}${data.image}` : undefined,
+        datePublished: data.datePublished,
+        dateModified: data.dateModified || data.datePublished,
+        author: {
+          '@type': 'Person',
+          name: data.author || 'Blog Worms Team',
+        },
+        publisher: {
+          '@type': 'Organization',
+          name: 'Blog Worms',
+          logo: {
+            '@type': 'ImageObject',
+            url: `${siteUrl}/images/blog-worms-logo.png`,
+          },
+        },
+        mainEntityOfPage: {
+          '@type': 'WebPage',
+          '@id': data.url || siteUrl,
+        },
+        articleSection: data.category,
+        keywords: data.tags,
+      };
+
+    case 'faq':
+      return {
+        '@context': 'https://schema.org',
+        '@type': 'FAQPage',
+        mainEntity: (data.faqs as { question: string; answer: string }[] || []).map(
+          (faq) => ({
+            '@type': 'Question',
+            name: faq.question,
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: faq.answer,
+            },
+          })
+        ),
+      };
+
+    case 'breadcrumb':
+      return {
+        '@context': 'https://schema.org',
+        '@type': 'BreadcrumbList',
+        itemListElement: (data.items as { name: string; url: string }[] || []).map(
+          (item, index) => ({
+            '@type': 'ListItem',
+            position: index + 1,
+            name: item.name,
+            item: `${siteUrl}${item.url}`,
+          })
+        ),
+      };
+
+    default:
+      return {};
+  }
+}
+
+const schema = buildSchema();
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(schema)} />

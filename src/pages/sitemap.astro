@@ -1,0 +1,91 @@
+---
+import PageLayout from '@/layouts/PageLayout.astro';
+import { getCollection } from 'astro:content';
+import { NAV_LINKS, LEGAL_LINKS, CATEGORIES } from '@/data/site';
+
+const allPosts = await getCollection('blog', ({ data }) => !data.draft);
+const sortedPosts = allPosts.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+---
+
+<PageLayout
+  title="Sitemap"
+  description="A complete sitemap of Blog Worms – find all our pages, blog posts, and categories in one place."
+  breadcrumbLabel="Sitemap"
+>
+  <p class="text-lg text-surface-600 mb-8">
+    Find everything on Blog Worms in one place. Use this sitemap to navigate to any page or post on our website.
+  </p>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+    <!-- Main Pages -->
+    <div>
+      <h2 class="text-xl font-bold text-surface-900 mb-4 flex items-center gap-2">
+        <span class="w-2 h-2 bg-primary-500 rounded-full"></span>
+        Main Pages
+      </h2>
+      <ul class="space-y-2">
+        {NAV_LINKS.map((link) => (
+          <li>
+            <a href={link.href} class="text-primary-600 hover:text-primary-700 hover:underline">
+              {link.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+
+    <!-- Legal Pages -->
+    <div>
+      <h2 class="text-xl font-bold text-surface-900 mb-4 flex items-center gap-2">
+        <span class="w-2 h-2 bg-accent-500 rounded-full"></span>
+        Legal Pages
+      </h2>
+      <ul class="space-y-2">
+        {LEGAL_LINKS.map((link) => (
+          <li>
+            <a href={link.href} class="text-primary-600 hover:text-primary-700 hover:underline">
+              {link.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+
+    <!-- Categories -->
+    <div>
+      <h2 class="text-xl font-bold text-surface-900 mb-4 flex items-center gap-2">
+        <span class="w-2 h-2 bg-green-500 rounded-full"></span>
+        Categories
+      </h2>
+      <ul class="space-y-2">
+        {CATEGORIES.map((cat) => (
+          <li>
+            <a href={`/blog/?category=${cat.slug}`} class="text-primary-600 hover:text-primary-700 hover:underline">
+              {cat.icon} {cat.name}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+
+    <!-- Blog Posts -->
+    <div class="md:col-span-2">
+      <h2 class="text-xl font-bold text-surface-900 mb-4 flex items-center gap-2">
+        <span class="w-2 h-2 bg-purple-500 rounded-full"></span>
+        Blog Posts ({sortedPosts.length})
+      </h2>
+      <ul class="space-y-2 columns-1 md:columns-2">
+        {sortedPosts.map((post) => (
+          <li class="break-inside-avoid">
+            <a href={`/blog/${post.id}/`} class="text-primary-600 hover:text-primary-700 hover:underline">
+              {post.data.title}
+            </a>
+            <span class="text-xs text-surface-400 ml-2">
+              {new Date(post.data.date).toLocaleDateString('en-GB', { month: 'short', year: 'numeric' })}
+            </span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </div>
+</PageLayout>

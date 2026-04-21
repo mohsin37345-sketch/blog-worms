@@ -1,0 +1,64 @@
+---
+interface FaqItem {
+  question: string;
+  answer: string;
+}
+
+interface Props {
+  faqs: FaqItem[];
+  title?: string;
+}
+
+const { faqs, title = 'Frequently Asked Questions' } = Astro.props;
+---
+
+{faqs.length > 0 && (
+  <section class="section section-alt" id="faq-section">
+    <div class="container-blog max-w-3xl">
+      <h2 class="text-2xl md:text-3xl font-bold text-surface-900 text-center mb-10">{title}</h2>
+
+      <div class="space-y-0" id="faq-accordion">
+        {faqs.map((faq, i) => (
+          <div class="faq-item" id={`faq-${i}`}>
+            <button
+              class="faq-question"
+              aria-expanded="false"
+              aria-controls={`faq-answer-${i}`}
+              data-faq-trigger
+            >
+              <span>{faq.question}</span>
+              <svg class="faq-icon w-5 h-5 text-surface-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12M6 12h12" />
+              </svg>
+            </button>
+            <div class="faq-answer" id={`faq-answer-${i}`} role="region">
+              <p>{faq.answer}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+)}
+
+<script>
+  document.querySelectorAll('[data-faq-trigger]').forEach((button) => {
+    button.addEventListener('click', () => {
+      const answer = button.nextElementSibling;
+      const icon = button.querySelector('.faq-icon');
+      const isOpen = answer?.classList.contains('open');
+
+      // Close all others
+      document.querySelectorAll('.faq-answer').forEach((a) => a.classList.remove('open'));
+      document.querySelectorAll('.faq-icon').forEach((i) => i.classList.remove('open'));
+      document.querySelectorAll('[data-faq-trigger]').forEach((b) => b.setAttribute('aria-expanded', 'false'));
+
+      // Toggle current
+      if (!isOpen) {
+        answer?.classList.add('open');
+        icon?.classList.add('open');
+        button.setAttribute('aria-expanded', 'true');
+      }
+    });
+  });
+</script>

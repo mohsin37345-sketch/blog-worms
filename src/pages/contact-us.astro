@@ -1,0 +1,62 @@
+---
+import PageLayout from '@/layouts/PageLayout.astro';
+import ContactForm from '@/components/ContactForm.astro';
+---
+
+<PageLayout
+  title="Contact Us"
+  description="Get in touch with the Blog Worms team. Send us your questions, topic suggestions, or feedback – we'd love to hear from you."
+  breadcrumbLabel="Contact Us"
+>
+  <p class="text-lg text-surface-600 mb-8 leading-relaxed">
+    We'd love to hear from you! Whether you have a topic suggestion, feedback on one of our articles, a partnership enquiry, or just want to say hello — our team is here and ready to help.
+  </p>
+
+  <div class="grid grid-cols-1 lg:grid-cols-5 gap-10">
+    <!-- Form -->
+    <div class="lg:col-span-3">
+      <div class="card p-6 md:p-8">
+        <h2 class="text-xl font-bold text-surface-900 mb-6">Send Us a Message</h2>
+        <ContactForm />
+      </div>
+    </div>
+
+    <!-- Contact Info -->
+    <div class="lg:col-span-2 space-y-6">
+      <div class="card p-6">
+        <h3 class="font-bold text-surface-900 mb-3 flex items-center gap-2">
+          <svg class="w-5 h-5 text-primary-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+          </svg>
+          Email Us
+        </h3>
+        <p class="text-surface-600 text-sm mb-2">For general enquiries and topic suggestions:</p>
+        <a href="mailto:mohsin37345@gmail.com" class="text-primary-600 hover:text-primary-700 font-medium">mohsin37345@gmail.com</a>
+      </div>
+
+      <div class="card p-6">
+        <h3 class="font-bold text-surface-900 mb-3 flex items-center gap-2">
+          <svg class="w-5 h-5 text-primary-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          Response Time
+        </h3>
+        <p class="text-surface-600 text-sm">
+          We aim to respond to all enquiries within <strong>24–48 hours</strong> during business days. For urgent matters, please mention it in the subject of your email.
+        </p>
+      </div>
+
+      <div class="card p-6">
+        <h3 class="font-bold text-surface-900 mb-3 flex items-center gap-2">
+          <svg class="w-5 h-5 text-primary-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
+          </svg>
+          Partnerships
+        </h3>
+        <p class="text-surface-600 text-sm">
+          Interested in collaborating, guest posting, or advertising with Blog Worms? We're always open to partnerships that benefit our readers.
+        </p>
+      </div>
+    </div>
+  </div>
+</PageLayout>

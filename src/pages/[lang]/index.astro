@@ -1,0 +1,60 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Hero from '@/components/Hero.astro';
+import FeaturedPosts from '@/components/FeaturedPosts.astro';
+import BlogGrid from '@/components/BlogGrid.astro';
+import Categories from '@/components/Categories.astro';
+import WhyBlogWorms from '@/components/WhyBlogWorms.astro';
+import FAQ from '@/components/FAQ.astro';
+import { getCollection } from 'astro:content';
+import { useTranslations, type Lang } from '@/i18n/utils';
+
+export function getStaticPaths() {
+  return [
+    { params: { lang: 'es' } },
+    { params: { lang: 'fr' } },
+    { params: { lang: 'de' } },
+    { params: { lang: 'ar' } },
+  ];
+}
+
+const { lang } = Astro.params as { lang: Lang };
+const t = useTranslations(lang);
+
+const allPosts = await getCollection('blog', ({ data }) => !data.draft);
+const latestPosts = allPosts
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .slice(0, 6);
+
+const homeFaqs = [
+  {
+    question: 'What is Blog Worms?',
+    answer: 'Blog Worms is a UK-based content platform that covers trending topics, viral stories, and questions that haven\'t been properly answered online.',
+  },
+  {
+    question: 'How often is Blog Worms updated?',
+    answer: 'We publish new content regularly, often multiple times per week, monitoring UK Google Trends and social media.',
+  },
+  {
+    question: 'Is Blog Worms free to read?',
+    answer: 'Yes, absolutely! All our content is completely free to read and accessible to everyone.',
+  },
+];
+---
+
+<BaseLayout
+  title={t('home.hero.title')}
+  description={t('home.hero.subtitle')}
+  lang={lang}
+>
+  <Hero />
+  <FeaturedPosts />
+  <section class="section" id="latest-posts">
+    <div class="container-blog">
+      <BlogGrid posts={latestPosts} title={t('home.latest')} showAll={true} />
+    </div>
+  </section>
+  <Categories />
+  <WhyBlogWorms />
+  <FAQ faqs={homeFaqs} title={t('home.faq.title')} />
+</BaseLayout>

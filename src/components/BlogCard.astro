@@ -1,0 +1,76 @@
+---
+interface Props {
+  image: string;
+  imageAlt?: string;
+  title: string;
+  description: string;
+  date: Date;
+  category: string;
+  slug: string;
+  author?: string;
+  featured?: boolean;
+}
+
+const { image, imageAlt = '', title, description, date, category, slug, author = 'Blog Worms Team', featured = false } = Astro.props;
+
+const formattedDate = new Date(date).toLocaleDateString('en-GB', {
+  day: 'numeric',
+  month: 'long',
+  year: 'numeric',
+});
+
+const categoryClasses: Record<string, string> = {
+  trending: 'badge-trending',
+  guides: 'badge-guides',
+  questions: 'badge-questions',
+};
+---
+
+<article class={`card group ${featured ? 'md:col-span-2 lg:col-span-2' : ''}`}>
+  <a href={`/blog/${slug}/`} class="block" id={`blog-card-${slug}`}>
+    <!-- Image -->
+    <div class={`relative overflow-hidden ${featured ? 'aspect-[21/9]' : 'aspect-[16/10]'}`}>
+      <img
+        src={image}
+        alt={imageAlt || title}
+        width={featured ? 800 : 400}
+        height={featured ? 340 : 250}
+        class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+        loading="lazy"
+        decoding="async"
+      />
+      <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+
+      <!-- Category Badge -->
+      <span class={`badge ${categoryClasses[category] || 'badge'} absolute top-3 left-3`}>
+        {category}
+      </span>
+    </div>
+
+    <!-- Content -->
+    <div class="p-5 md:p-6">
+      <div class="flex items-center gap-3 text-xs text-surface-500 mb-3">
+        <time datetime={date.toISOString()}>
+          {formattedDate}
+        </time>
+        <span class="w-1 h-1 rounded-full bg-surface-300"></span>
+        <span>{author}</span>
+      </div>
+
+      <h3 class={`font-bold text-surface-900 mb-2 group-hover:text-primary-600 transition-colors line-clamp-2 ${featured ? 'text-xl md:text-2xl' : 'text-lg'}`}>
+        {title}
+      </h3>
+
+      <p class="text-sm text-surface-600 line-clamp-2 mb-4">
+        {description}
+      </p>
+
+      <span class="inline-flex items-center gap-1.5 text-sm font-semibold text-primary-600 group-hover:gap-2.5 transition-all">
+        Read More
+        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+        </svg>
+      </span>
+    </div>
+  </a>
+</article>

@@ -1,0 +1,178 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import Breadcrumbs from '@/components/Breadcrumbs.astro';
+import TableOfContents from '@/components/TableOfContents.astro';
+import RelatedPosts from '@/components/RelatedPosts.astro';
+import SocialShare from '@/components/SocialShare.astro';
+import FAQ from '@/components/FAQ.astro';
+import SchemaOrg from '@/components/SchemaOrg.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  image: string;
+  imageAlt?: string;
+  date: Date;
+  updatedDate?: Date;
+  author: string;
+  category: string;
+  slug: string;
+  tags?: string[];
+  faqs?: { question: string; answer: string }[];
+  headings: { depth: number; slug: string; text: string }[];
+}
+
+const {
+  title,
+  description,
+  image,
+  imageAlt = '',
+  date,
+  updatedDate,
+  author,
+  category,
+  slug,
+  tags = [],
+  faqs = [],
+  headings,
+} = Astro.props;
+
+const formattedDate = new Date(date).toLocaleDateString('en-GB', {
+  day: 'numeric',
+  month: 'long',
+  year: 'numeric',
+});
+
+// Estimate reading time
+const wordCount = 1500; // Will be calculated from content
+const readingTime = Math.max(1, Math.ceil(wordCount / 200));
+
+const categoryClasses: Record<string, string> = {
+  trending: 'badge-trending',
+  guides: 'badge-guides',
+  questions: 'badge-questions',
+};
+
+const breadcrumbItems = [
+  { label: 'Blog', href: '/blog/' },
+  { label: title, href: `/blog/${slug}/` },
+];
+
+const blogSchema = {
+  type: 'blogPosting' as const,
+  data: {
+    title,
+    description,
+    image,
+    datePublished: date.toISOString(),
+    dateModified: updatedDate?.toISOString() || date.toISOString(),
+    author,
+    category,
+    tags,
+    url: `/blog/${slug}/`,
+  },
+};
+
+const breadcrumbSchema = {
+  type: 'breadcrumb' as const,
+  data: {
+    items: [
+      { name: 'Home', url: '/' },
+      { name: 'Blog', url: '/blog/' },
+      { name: title, url: `/blog/${slug}/` },
+    ],
+  },
+};
+
+const faqSchema = faqs.length > 0
+  ? { type: 'faq' as const, data: { faqs } }
+  : null;
+
+const schemas = [blogSchema, breadcrumbSchema, ...(faqSchema ? [faqSchema] : [])];
+---
+
+<BaseLayout
+  title={`${title} | Blog Worms`}
+  description={description}
+  image={image}
+  type="article"
+  publishedDate={date.toISOString()}
+  modifiedDate={updatedDate?.toISOString()}
+  author={author}
+  schema={schemas}
+>
+  <!-- Hero Image -->
+  <div class="relative w-full aspect-[21/9] md:aspect-[21/7] overflow-hidden bg-surface-200">
+    <img
+      src={image}
+      alt={imageAlt || title}
+      width="1200"
+      height="400"
+      class="w-full h-full object-cover"
+      loading="eager"
+    />
+    <div class="absolute inset-0 bg-gradient-to-t from-surface-900/60 via-surface-900/20 to-transparent"></div>
+
+    <!-- Title overlay on hero -->
+    <div class="absolute bottom-0 left-0 right-0 p-6 md:p-10 lg:p-14">
+      <div class="container-blog">
+        <span class={`badge ${categoryClasses[category] || 'badge'} mb-3`}>
+          {category}
+        </span>
+        <h1 class="text-2xl md:text-4xl lg:text-5xl font-extrabold text-white max-w-4xl leading-tight text-balance">
+          {title}
+        </h1>
+        <div class="flex flex-wrap items-center gap-3 mt-4 text-sm text-white/80">
+          <time datetime={date.toISOString()}>
+            {formattedDate}
+          </time>
+          <span class="w-1 h-1 rounded-full bg-white/40"></span>
+          <span>{author}</span>
+          <span class="w-1 h-1 rounded-full bg-white/40"></span>
+          <span>{readingTime} min read</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Content Area -->
+  <div class="container-blog py-10 md:py-14">
+    <!-- Breadcrumbs -->
+    <Breadcrumbs items={breadcrumbItems} />
+
+    <div class="flex flex-col lg:flex-row gap-10">
+      <!-- Main Content -->
+      <article class="flex-1 min-w-0">
+        <!-- Social Share (top) -->
+        <div class="mb-8">
+          <SocialShare title={title} url={`/blog/${slug}/`} />
+        </div>
+
+        <!-- MDX Content -->
+        <div class="prose prose-lg max-w-none prose-headings:scroll-mt-24 prose-a:text-primary-600 prose-img:rounded-xl">
+          <slot />
+        </div>
+
+        <!-- FAQ Section -->
+        {faqs.length > 0 && (
+          <div class="mt-16">
+            <FAQ faqs={faqs} title="Frequently Asked Questions" />
+          </div>
+        )}
+
+        <!-- Social Share (bottom) -->
+        <div class="mt-10 pt-8 border-t border-surface-200">
+          <SocialShare title={title} url={`/blog/${slug}/`} />
+        </div>
+
+        <!-- Related Posts -->
+        <RelatedPosts currentSlug={slug} category={category} />
+      </article>
+
+      <!-- Sidebar -->
+      <aside class="lg:w-72 xl:w-80 shrink-0 hidden lg:block">
+        <TableOfContents headings={headings} />
+      </aside>
+    </div>
+  </div>
+</BaseLayout>

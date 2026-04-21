@@ -1,0 +1,37 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import Breadcrumbs from '@/components/Breadcrumbs.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  breadcrumbLabel?: string;
+  noindex?: boolean;
+}
+
+const { title, description, breadcrumbLabel, noindex = false } = Astro.props;
+
+const breadcrumbItems = breadcrumbLabel
+  ? [{ label: breadcrumbLabel, href: Astro.url.pathname }]
+  : [];
+---
+
+<BaseLayout
+  title={`${title} | Blog Worms`}
+  description={description}
+  noindex={noindex}
+>
+  <div class="container-blog py-10 md:py-14">
+    {breadcrumbItems.length > 0 && <Breadcrumbs items={breadcrumbItems} />}
+
+    <div class="max-w-3xl mx-auto">
+      <h1 class="text-3xl md:text-4xl font-extrabold text-surface-900 mb-6 text-balance">
+        {title}
+      </h1>
+
+      <div class="prose prose-lg max-w-none">
+        <slot />
+      </div>
+    </div>
+  </div>
+</BaseLayout>

@@ -1,0 +1,95 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Hero from '@/components/Hero.astro';
+import FeaturedPosts from '@/components/FeaturedPosts.astro';
+import BlogGrid from '@/components/BlogGrid.astro';
+import Categories from '@/components/Categories.astro';
+import WhyBlogWorms from '@/components/WhyBlogWorms.astro';
+import FAQ from '@/components/FAQ.astro';
+import { getCollection } from 'astro:content';
+
+const allPosts = await getCollection('blog', ({ data }) => !data.draft);
+const latestPosts = allPosts
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .slice(0, 6);
+
+const homeFaqs = [
+  {
+    question: 'What is Blog Worms?',
+    answer: 'Blog Worms is a UK-based content platform that covers trending topics, viral stories, and questions that haven\'t been properly answered online. We research and publish in-depth articles on the subjects people are actually searching for.',
+  },
+  {
+    question: 'How often is Blog Worms updated?',
+    answer: 'We publish new content regularly, often multiple times per week. Our team monitors UK Google Trends and social media to identify breaking topics and cover them quickly with well-researched articles.',
+  },
+  {
+    question: 'Is Blog Worms free to read?',
+    answer: 'Yes, absolutely! All our content is completely free to read. We believe knowledge should be accessible to everyone. Our site is supported by advertising to keep the lights on.',
+  },
+  {
+    question: 'What topics does Blog Worms cover?',
+    answer: 'We cover three main categories: Trending (hot topics and breaking news in the UK), Guides (in-depth how-to articles and explainers), and Questions (answers to commonly searched questions that lack good answers online).',
+  },
+  {
+    question: 'Can I suggest a topic for Blog Worms?',
+    answer: 'We love hearing from our readers! If you have a topic suggestion or a question you\'d like us to research, head to our Contact Us page and send us a message. We review every suggestion.',
+  },
+  {
+    question: 'How can I stay updated with Blog Worms content?',
+    answer: 'The best way to stay updated is to bookmark our site and visit regularly. You can also follow us on social media platforms where we share our latest articles and trending topics.',
+  },
+];
+
+const websiteSchema = {
+  type: 'website' as const,
+  data: {},
+};
+
+const faqSchema = {
+  type: 'faq' as const,
+  data: { faqs: homeFaqs },
+};
+---
+
+<BaseLayout
+  title="Blog Worms – Latest Viral & Trending Blogs | UK Trending Topics"
+  description="Blog Worms is your go-to source for the latest viral and trending blogs in the UK. Discover trending topics, unanswered questions, and viral content that matters."
+  schema={[websiteSchema, faqSchema]}
+>
+  <!-- Hero Section -->
+  <Hero />
+
+  <!-- Featured Posts -->
+  <FeaturedPosts />
+
+  <!-- Latest Posts -->
+  <section class="section" id="latest-posts">
+    <div class="container-blog">
+      <BlogGrid posts={latestPosts} title="Latest Posts" showAll={true} />
+    </div>
+  </section>
+
+  <!-- Categories -->
+  <Categories />
+
+  <!-- Why Blog Worms -->
+  <WhyBlogWorms />
+
+  <!-- FAQ -->
+  <FAQ faqs={homeFaqs} />
+
+  <!-- Internal Links Section -->
+  <section class="section" id="explore-more">
+    <div class="container-blog text-center">
+      <h2 class="text-2xl md:text-3xl font-bold text-surface-900 mb-4">Explore More</h2>
+      <p class="text-surface-600 mb-8 max-w-xl mx-auto">
+        Dive deeper into Blog Worms and discover content that resonates with you.
+      </p>
+      <div class="flex flex-wrap justify-center gap-4">
+        <a href="/blog/" class="btn-primary">Browse All Posts</a>
+        <a href="/about-us/" class="btn-secondary">About Us</a>
+        <a href="/contact-us/" class="btn-secondary">Get in Touch</a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

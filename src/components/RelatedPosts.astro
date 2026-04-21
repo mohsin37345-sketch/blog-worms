@@ -1,0 +1,49 @@
+---
+import BlogCard from './BlogCard.astro';
+import { getCollection } from 'astro:content';
+
+interface Props {
+  currentSlug: string;
+  category: string;
+  limit?: number;
+}
+
+const { currentSlug, category, limit = 3 } = Astro.props;
+
+const allPosts = await getCollection('blog', ({ data }) => !data.draft);
+const relatedPosts = allPosts
+  .filter((post) => post.id !== currentSlug && post.data.category === category)
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .slice(0, limit);
+
+// Fill with latest posts if not enough in same category
+const postsToShow = relatedPosts.length >= limit
+  ? relatedPosts
+  : [
+      ...relatedPosts,
+      ...allPosts
+        .filter((post) => post.id !== currentSlug && !relatedPosts.includes(post))
+        .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+        .slice(0, limit - relatedPosts.length),
+    ];
+---
+
+{postsToShow.length > 0 && (
+  <section class="mt-16" id="related-posts">
+    <h2 class="text-2xl font-bold text-surface-900 mb-8">Related Posts</h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      {postsToShow.map((post) => (
+        <BlogCard
+          slug={post.id}
+          title={post.data.title}
+          description={post.data.description}
+          image={post.data.image}
+          imageAlt={post.data.imageAlt}
+          date={post.data.date}
+          category={post.data.category}
+          author={post.data.author}
+        />
+      ))}
+    </div>
+  </section>
+)}

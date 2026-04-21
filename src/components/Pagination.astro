@@ -1,0 +1,79 @@
+---
+interface Props {
+  currentPage: number;
+  totalPages: number;
+  baseUrl: string;
+}
+
+const { currentPage, totalPages, baseUrl } = Astro.props;
+
+const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
+const prevUrl = currentPage > 1 ? (currentPage === 2 ? baseUrl : `${baseUrl}/${currentPage - 1}/`) : null;
+const nextUrl = currentPage < totalPages ? `${baseUrl}/${currentPage + 1}/` : null;
+---
+
+{totalPages > 1 && (
+  <nav class="flex items-center justify-center gap-2 mt-12" aria-label="Pagination" id="pagination">
+    <!-- Previous -->
+    {prevUrl ? (
+      <a
+        href={prevUrl}
+        class="flex items-center gap-1 px-4 py-2 rounded-lg text-sm font-medium text-surface-600 hover:text-primary-600 hover:bg-surface-100 transition-colors"
+        id="pagination-prev"
+      >
+        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+        </svg>
+        Previous
+      </a>
+    ) : (
+      <span class="flex items-center gap-1 px-4 py-2 rounded-lg text-sm font-medium text-surface-300 cursor-not-allowed">
+        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+        </svg>
+        Previous
+      </span>
+    )}
+
+    <!-- Page Numbers -->
+    <div class="flex gap-1">
+      {pages.map((page) => {
+        const isActive = page === currentPage;
+        const pageUrl = page === 1 ? baseUrl : `${baseUrl}/${page}/`;
+        return isActive ? (
+          <span class="w-10 h-10 rounded-lg flex items-center justify-center text-sm font-bold bg-primary-600 text-white">
+            {page}
+          </span>
+        ) : (
+          <a
+            href={pageUrl}
+            class="w-10 h-10 rounded-lg flex items-center justify-center text-sm font-medium text-surface-600 hover:text-primary-600 hover:bg-surface-100 transition-colors"
+          >
+            {page}
+          </a>
+        );
+      })}
+    </div>
+
+    <!-- Next -->
+    {nextUrl ? (
+      <a
+        href={nextUrl}
+        class="flex items-center gap-1 px-4 py-2 rounded-lg text-sm font-medium text-surface-600 hover:text-primary-600 hover:bg-surface-100 transition-colors"
+        id="pagination-next"
+      >
+        Next
+        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+        </svg>
+      </a>
+    ) : (
+      <span class="flex items-center gap-1 px-4 py-2 rounded-lg text-sm font-medium text-surface-300 cursor-not-allowed">
+        Next
+        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+        </svg>
+      </span>
+    )}
+  </nav>
+)}
