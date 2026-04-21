@@ -26,7 +26,7 @@ export const LEGAL_LINKS = [
 export const SOCIAL_LINKS = [
   { label: 'Twitter', href: 'https://twitter.com/blogwormsuk', icon: 'twitter' },
   { label: 'Pinterest', href: 'https://www.pinterest.com/blogwormsuk/', icon: 'pinterest' },
-  { label: 'LinkedIn', href: 'https://linkedin.com/company/blogworms', icon: 'linkedin' },
+  { label: 'YouTube', href: 'https://www.youtube.com/@blogwormsuk', icon: 'youtube' },
 ] as const;
 
 export const CATEGORIES = [
