@@ -95,7 +95,25 @@ const year = new Date().getFullYear();
   <div class="border-t border-surface-800">
     <div class="container-blog py-5 flex flex-col sm:flex-row justify-between items-center gap-3 text-xs text-surface-500">
       <p>&copy; {year} Blog Worms. All rights reserved.</p>
-      <p>Built by Mohsin Mughal.</p>
+      <div class="flex items-center gap-4">
+        <a
+          href="/sitemap/"
+          class="text-surface-400 hover:text-primary-400 transition-colors"
+          id="footer-html-sitemap"
+        >
+          Sitemap
+        </a>
+        <span class="text-surface-700">|</span>
+        <a
+          href="/sitemap-index.xml"
+          class="text-surface-400 hover:text-primary-400 transition-colors"
+          id="footer-xml-sitemap"
+        >
+          XML Sitemap
+        </a>
+        <span class="text-surface-700">|</span>
+        <p>Built by Mohsin Mughal.</p>
+      </div>
     </div>
   </div>
 </footer>

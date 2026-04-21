@@ -10,6 +10,13 @@ export default defineConfig({
   integrations: [
     mdx(),
     sitemap({
+      filter: (page) =>
+        !page.includes('/sitemap') &&
+        !page.includes('/404') &&
+        !page.includes('/llms.txt'),
+      changefreq: 'weekly',
+      priority: 0.7,
+      lastmod: new Date(),
       i18n: {
         defaultLocale: 'en',
         locales: {
