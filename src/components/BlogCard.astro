@@ -15,7 +15,7 @@ const { image, imageAlt = '', title, description, date, category, slug, author =
 
 const formattedDate = new Date(date).toLocaleDateString('en-GB', {
   day: 'numeric',
-  month: 'long',
+  month: 'short',
   year: 'numeric',
 });
 
@@ -26,10 +26,10 @@ const categoryClasses: Record<string, string> = {
 };
 ---
 
-<article class={`card group ${featured ? 'md:col-span-2 lg:col-span-2' : ''}`}>
-  <a href={`/blog/${slug}/`} class="block" id={`blog-card-${slug}`}>
-    <!-- Image -->
-    <div class={`relative overflow-hidden ${featured ? 'aspect-[21/9]' : 'aspect-[16/10]'}`}>
+<article class={`card group ${featured ? 'sm:col-span-2 lg:col-span-2' : ''}`}>
+  <a href={`/blog/${slug}/`} class="block min-h-[44px]" id={`blog-card-${slug}`}>
+    <!-- Image — 16:10 on mobile, wider on featured -->
+    <div class={`relative overflow-hidden ${featured ? 'aspect-[16/10] sm:aspect-[21/9]' : 'aspect-[16/10]'}`}>
       <img
         src={image}
         alt={imageAlt || title}
@@ -47,25 +47,25 @@ const categoryClasses: Record<string, string> = {
       </span>
     </div>
 
-    <!-- Content -->
-    <div class="p-5 md:p-6">
-      <div class="flex items-center gap-3 text-xs text-surface-500 mb-3">
+    <!-- Content — Generous padding for thumb-friendly tapping -->
+    <div class="p-4 sm:p-5 md:p-6">
+      <div class="flex items-center gap-2 text-xs text-surface-500 mb-2 sm:mb-3">
         <time datetime={date.toISOString()}>
           {formattedDate}
         </time>
         <span class="w-1 h-1 rounded-full bg-surface-300"></span>
-        <span>{author}</span>
+        <span class="truncate">{author}</span>
       </div>
 
-      <h3 class={`font-bold text-surface-900 mb-2 group-hover:text-primary-600 transition-colors line-clamp-2 ${featured ? 'text-xl md:text-2xl' : 'text-lg'}`}>
+      <h3 class={`font-bold text-surface-900 mb-2 group-hover:text-primary-600 transition-colors line-clamp-2 ${featured ? 'text-lg sm:text-xl md:text-2xl' : 'text-base sm:text-lg'}`}>
         {title}
       </h3>
 
-      <p class="text-sm text-surface-600 line-clamp-2 mb-4">
+      <p class="text-sm text-surface-600 line-clamp-2 mb-3 sm:mb-4 leading-relaxed">
         {description}
       </p>
 
-      <span class="inline-flex items-center gap-1.5 text-sm font-semibold text-primary-600 group-hover:gap-2.5 transition-all">
+      <span class="inline-flex items-center gap-1.5 text-sm font-semibold text-primary-600 group-hover:gap-2.5 transition-all py-1">
         Read More
         <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
           <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />

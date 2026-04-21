@@ -3,6 +3,7 @@
 
 /* ============================================
    Blog Worms Design System — Tailwind v4
+   Mobile-First Optimized (70%+ mobile audience)
    ============================================ */
 
 @theme {
@@ -59,7 +60,7 @@
 }
 
 /* ============================================
-   Base Styles
+   Base Styles — Mobile-First
    ============================================ */
 
 @layer base {
@@ -67,6 +68,9 @@
     scroll-behavior: smooth;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    /* Prevent zoom on input focus (iOS) */
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
   }
 
   body {
@@ -74,6 +78,16 @@
     color: var(--color-surface-800);
     background-color: var(--color-surface-50);
     line-height: 1.7;
+    font-size: 16px; /* Prevent iOS zoom on inputs */
+    overflow-x: hidden; /* Prevent horizontal scroll on mobile */
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Prevent body scroll when mobile menu is open */
+  body.menu-open {
+    overflow: hidden;
+    position: fixed;
+    width: 100%;
   }
 
   /* RTL Support */
@@ -96,10 +110,32 @@
     background-color: var(--color-primary-200);
     color: var(--color-primary-900);
   }
+
+  /* Ensure all images are responsive by default */
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  /* Better tap highlighting on mobile */
+  a, button {
+    -webkit-tap-highlight-color: rgba(99, 102, 241, 0.1);
+  }
+
+  /* Minimum touch target size (48x48px per WCAG) */
+  button, a, input, select, textarea {
+    min-height: 44px;
+  }
+
+  /* Smooth inputs on mobile */
+  input, textarea, select {
+    font-size: 16px; /* Prevents iOS zoom */
+    border-radius: var(--radius-button);
+  }
 }
 
 /* ============================================
-   Animations
+   Animations — Reduced motion support
    ============================================ */
 
 @keyframes fade-in {
@@ -122,12 +158,27 @@
   50% { box-shadow: 0 0 0 8px rgba(99, 102, 241, 0); }
 }
 
+@keyframes slide-in-menu {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Respect reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  html { scroll-behavior: auto; }
+}
+
 /* ============================================
-   Component Styles
+   Component Styles — Mobile-First
    ============================================ */
 
 @layer components {
-  /* Card */
+  /* Card — Larger touch area, no hover transform on mobile */
   .card {
     background: white;
     border-radius: var(--radius-card);
@@ -135,50 +186,70 @@
     overflow: hidden;
     transition: all 0.3s ease;
   }
-  .card:hover {
-    box-shadow: var(--shadow-card-hover);
-    transform: translateY(-2px);
+  @media (hover: hover) {
+    .card:hover {
+      box-shadow: var(--shadow-card-hover);
+      transform: translateY(-2px);
+    }
   }
 
-  /* Button */
+  /* Button — Minimum 48px touch targets */
   .btn-primary {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: 0.75rem 1.5rem;
+    padding: 0.875rem 1.5rem;
+    min-height: 48px;
     background: linear-gradient(135deg, var(--color-primary-500), var(--color-primary-600));
     color: white;
     font-weight: 600;
+    font-size: 1rem;
     border-radius: var(--radius-button);
     transition: all 0.3s ease;
     text-decoration: none;
     border: none;
     cursor: pointer;
+    -webkit-appearance: none;
+    appearance: none;
   }
-  .btn-primary:hover {
-    background: linear-gradient(135deg, var(--color-primary-600), var(--color-primary-700));
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+  @media (hover: hover) {
+    .btn-primary:hover {
+      background: linear-gradient(135deg, var(--color-primary-600), var(--color-primary-700));
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+    }
+  }
+  .btn-primary:active {
+    transform: scale(0.98);
   }
 
   .btn-secondary {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: 0.75rem 1.5rem;
+    padding: 0.875rem 1.5rem;
+    min-height: 48px;
     background: white;
     color: var(--color-primary-600);
     font-weight: 600;
+    font-size: 1rem;
     border-radius: var(--radius-button);
     border: 2px solid var(--color-primary-200);
     transition: all 0.3s ease;
     text-decoration: none;
     cursor: pointer;
+    -webkit-appearance: none;
+    appearance: none;
   }
-  .btn-secondary:hover {
-    background: var(--color-primary-50);
-    border-color: var(--color-primary-400);
-    transform: translateY(-1px);
+  @media (hover: hover) {
+    .btn-secondary:hover {
+      background: var(--color-primary-50);
+      border-color: var(--color-primary-400);
+      transform: translateY(-1px);
+    }
+  }
+  .btn-secondary:active {
+    transform: scale(0.98);
   }
 
   /* Badge */
@@ -207,19 +278,29 @@
     color: #3730a3;
   }
 
-  /* Section */
+  /* Section — Tighter padding on mobile */
   .section {
-    padding: 4rem 0;
+    padding: 2.5rem 0;
+  }
+  @media (min-width: 768px) {
+    .section {
+      padding: 4rem 0;
+    }
   }
   .section-alt {
     background-color: white;
   }
 
-  /* Container */
+  /* Container — Edge-to-edge on mobile with smaller gutters */
   .container-blog {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 0 1.5rem;
+    padding: 0 1rem;
+  }
+  @media (min-width: 640px) {
+    .container-blog {
+      padding: 0 1.5rem;
+    }
   }
 
   /* Gradient Text */
@@ -230,16 +311,24 @@
     background-clip: text;
   }
 
-  /* Prose overrides for blog content */
+  /* Prose overrides for mobile reading */
   .prose {
     --tw-prose-headings: var(--color-surface-900);
     --tw-prose-body: var(--color-surface-700);
     --tw-prose-links: var(--color-primary-600);
     max-width: 72ch;
+    font-size: 1rem;
+    line-height: 1.8;
+  }
+  @media (min-width: 768px) {
+    .prose {
+      font-size: 1.125rem;
+    }
   }
   .prose a {
     text-decoration: underline;
-    text-underline-offset: 2px;
+    text-underline-offset: 3px;
+    text-decoration-thickness: 1px;
     transition: color 0.2s ease;
   }
   .prose a:hover {
@@ -249,8 +338,25 @@
     border-radius: var(--radius-card);
     box-shadow: var(--shadow-card);
   }
+  /* Make prose tables scroll horizontally on mobile */
+  .prose table {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    white-space: nowrap;
+  }
+  @media (min-width: 768px) {
+    .prose table {
+      display: table;
+      white-space: normal;
+    }
+  }
+  /* Heading anchors scroll offset for sticky header */
+  .prose h2, .prose h3, .prose h4 {
+    scroll-margin-top: 5rem;
+  }
 
-  /* FAQ Accordion */
+  /* FAQ Accordion — Larger touch targets */
   .faq-item {
     border-bottom: 1px solid var(--color-surface-200);
   }
@@ -259,18 +365,29 @@
     align-items: center;
     justify-content: space-between;
     width: 100%;
-    padding: 1.25rem 0;
+    padding: 1rem 0;
+    min-height: 56px;
     font-weight: 600;
-    font-size: 1.05rem;
+    font-size: 0.95rem;
     color: var(--color-surface-800);
     background: transparent;
     border: none;
     cursor: pointer;
     text-align: left;
     transition: color 0.2s;
+    gap: 0.75rem;
+  }
+  @media (min-width: 768px) {
+    .faq-question {
+      padding: 1.25rem 0;
+      font-size: 1.05rem;
+    }
   }
   .faq-question:hover {
     color: var(--color-primary-600);
+  }
+  .faq-question:active {
+    color: var(--color-primary-700);
   }
   .faq-answer {
     max-height: 0;
@@ -278,6 +395,7 @@
     transition: max-height 0.4s ease, padding 0.4s ease;
     color: var(--color-surface-600);
     line-height: 1.8;
+    font-size: 0.9375rem;
   }
   .faq-answer.open {
     max-height: 500px;
@@ -286,10 +404,22 @@
   .faq-icon {
     transition: transform 0.3s ease;
     flex-shrink: 0;
-    margin-left: 1rem;
+    margin-left: 0.5rem;
   }
   .faq-icon.open {
     transform: rotate(45deg);
+  }
+
+  /* Mobile Menu Overlay */
+  .mobile-menu-overlay {
+    position: fixed;
+    inset: 0;
+    top: 56px;
+    background: white;
+    z-index: 40;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    animation: slide-in-menu 0.25s ease-out;
   }
 
   /* Scroll animation */
@@ -301,6 +431,60 @@
   .animate-on-scroll.visible {
     opacity: 1;
     transform: translateY(0);
+  }
+
+  /* Sticky share bar for mobile */
+  .mobile-share-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 30;
+    background: white;
+    border-top: 1px solid var(--color-surface-200);
+    padding: 0.5rem 1rem;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+  @media (min-width: 768px) {
+    .mobile-share-bar {
+      display: none;
+    }
+  }
+
+  /* Mobile TOC collapsible */
+  .mobile-toc {
+    background: white;
+    border: 1px solid var(--color-surface-200);
+    border-radius: var(--radius-card);
+    margin-bottom: 1.5rem;
+  }
+  .mobile-toc-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 1rem;
+    min-height: 48px;
+    font-weight: 700;
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-surface-900);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+  }
+  .mobile-toc-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+  }
+  .mobile-toc-content.open {
+    max-height: 600px;
   }
 }
 
@@ -332,5 +516,14 @@
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
+  }
+
+  /* Safe area insets for notched phones */
+  .safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom, 0);
+  }
+
+  .safe-top {
+    padding-top: env(safe-area-inset-top, 0);
   }
 }

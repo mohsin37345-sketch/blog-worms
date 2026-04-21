@@ -43,8 +43,9 @@ const isRtl = lang === 'ar';
 <html lang={lang} dir={isRtl ? 'rtl' : 'ltr'} class="scroll-smooth">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="generator" content={Astro.generator} />
+  <meta name="format-detection" content="telephone=no" />
 
   <SEOHead
     title={title}

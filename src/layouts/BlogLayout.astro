@@ -44,7 +44,7 @@ const formattedDate = new Date(date).toLocaleDateString('en-GB', {
 });
 
 // Estimate reading time
-const wordCount = 1500; // Will be calculated from content
+const wordCount = 1500;
 const readingTime = Math.max(1, Math.ceil(wordCount / 200));
 
 const categoryClasses: Record<string, string> = {
@@ -89,6 +89,11 @@ const faqSchema = faqs.length > 0
   : null;
 
 const schemas = [blogSchema, breadcrumbSchema, ...(faqSchema ? [faqSchema] : [])];
+
+const siteUrl = 'https://blogworms.co.uk';
+const fullUrl = `${siteUrl}/blog/${slug}/`;
+const encodedUrl = encodeURIComponent(fullUrl);
+const encodedTitle = encodeURIComponent(title);
 ---
 
 <BaseLayout
@@ -101,8 +106,8 @@ const schemas = [blogSchema, breadcrumbSchema, ...(faqSchema ? [faqSchema] : [])
   author={author}
   schema={schemas}
 >
-  <!-- Hero Image -->
-  <div class="relative w-full aspect-[21/9] md:aspect-[21/7] overflow-hidden bg-surface-200">
+  <!-- Hero Image — Taller on mobile for impact -->
+  <div class="relative w-full aspect-[16/10] sm:aspect-[21/9] md:aspect-[21/7] overflow-hidden bg-surface-200">
     <img
       src={image}
       alt={imageAlt || title}
@@ -111,18 +116,18 @@ const schemas = [blogSchema, breadcrumbSchema, ...(faqSchema ? [faqSchema] : [])
       class="w-full h-full object-cover"
       loading="eager"
     />
-    <div class="absolute inset-0 bg-gradient-to-t from-surface-900/60 via-surface-900/20 to-transparent"></div>
+    <div class="absolute inset-0 bg-gradient-to-t from-surface-900/70 via-surface-900/30 to-transparent"></div>
 
     <!-- Title overlay on hero -->
-    <div class="absolute bottom-0 left-0 right-0 p-6 md:p-10 lg:p-14">
+    <div class="absolute bottom-0 left-0 right-0 p-4 sm:p-6 md:p-10 lg:p-14">
       <div class="container-blog">
-        <span class={`badge ${categoryClasses[category] || 'badge'} mb-3`}>
+        <span class={`badge ${categoryClasses[category] || 'badge'} mb-2 sm:mb-3`}>
           {category}
         </span>
-        <h1 class="text-2xl md:text-4xl lg:text-5xl font-extrabold text-white max-w-4xl leading-tight text-balance">
+        <h1 class="text-xl sm:text-2xl md:text-4xl lg:text-5xl font-extrabold text-white max-w-4xl leading-tight text-balance">
           {title}
         </h1>
-        <div class="flex flex-wrap items-center gap-3 mt-4 text-sm text-white/80">
+        <div class="flex flex-wrap items-center gap-2 sm:gap-3 mt-2 sm:mt-4 text-xs sm:text-sm text-white/80">
           <time datetime={date.toISOString()}>
             {formattedDate}
           </time>
@@ -136,32 +141,37 @@ const schemas = [blogSchema, breadcrumbSchema, ...(faqSchema ? [faqSchema] : [])
   </div>
 
   <!-- Content Area -->
-  <div class="container-blog py-10 md:py-14">
+  <div class="container-blog py-6 sm:py-8 md:py-14">
     <!-- Breadcrumbs -->
     <Breadcrumbs items={breadcrumbItems} />
 
-    <div class="flex flex-col lg:flex-row gap-10">
+    <!-- Mobile TOC (shows only on mobile) -->
+    <div class="lg:hidden">
+      <TableOfContents headings={headings} />
+    </div>
+
+    <div class="flex flex-col lg:flex-row gap-8 lg:gap-10">
       <!-- Main Content -->
       <article class="flex-1 min-w-0">
-        <!-- Social Share (top) -->
-        <div class="mb-8">
+        <!-- Social Share (top — hidden on mobile, shown in sticky bar instead) -->
+        <div class="hidden sm:block mb-8">
           <SocialShare title={title} url={`/blog/${slug}/`} />
         </div>
 
-        <!-- MDX Content -->
-        <div class="prose prose-lg max-w-none prose-headings:scroll-mt-24 prose-a:text-primary-600 prose-img:rounded-xl">
+        <!-- MDX Content — Optimized for mobile reading -->
+        <div class="prose prose-lg max-w-none prose-headings:scroll-mt-20 sm:prose-headings:scroll-mt-24 prose-a:text-primary-600 prose-img:rounded-xl">
           <slot />
         </div>
 
         <!-- FAQ Section -->
         {faqs.length > 0 && (
-          <div class="mt-16">
+          <div class="mt-10 sm:mt-16">
             <FAQ faqs={faqs} title="Frequently Asked Questions" />
           </div>
         )}
 
         <!-- Social Share (bottom) -->
-        <div class="mt-10 pt-8 border-t border-surface-200">
+        <div class="mt-8 sm:mt-10 pt-6 sm:pt-8 border-t border-surface-200">
           <SocialShare title={title} url={`/blog/${slug}/`} />
         </div>
 
@@ -169,10 +179,82 @@ const schemas = [blogSchema, breadcrumbSchema, ...(faqSchema ? [faqSchema] : [])
         <RelatedPosts currentSlug={slug} category={category} />
       </article>
 
-      <!-- Sidebar -->
+      <!-- Desktop Sidebar -->
       <aside class="lg:w-72 xl:w-80 shrink-0 hidden lg:block">
         <TableOfContents headings={headings} />
       </aside>
     </div>
   </div>
+
+  <!-- Mobile Sticky Share Bar -->
+  <div class="mobile-share-bar safe-bottom sm:hidden" id="mobile-share-bar">
+    <a
+      href={`https://twitter.com/intent/tweet?text=${encodedTitle}&url=${encodedUrl}`}
+      target="_blank"
+      rel="noopener noreferrer"
+      class="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-lg text-sm font-medium text-surface-600 active:bg-surface-100 min-h-[44px]"
+      aria-label="Share on Twitter"
+    >
+      <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+      Share
+    </a>
+    <a
+      href={`https://wa.me/?text=${encodedTitle}%20${encodedUrl}`}
+      target="_blank"
+      rel="noopener noreferrer"
+      class="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-lg text-sm font-medium text-surface-600 active:bg-surface-100 min-h-[44px]"
+      aria-label="Share on WhatsApp"
+    >
+      <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      WhatsApp
+    </a>
+    <button
+      class="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-lg text-sm font-medium text-surface-600 active:bg-surface-100 min-h-[44px]"
+      aria-label="Copy link"
+      id="copy-link-btn"
+    >
+      <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+      </svg>
+      Copy Link
+    </button>
+  </div>
+
+  <script define:vars={{ fullUrl }}>
+    // Copy link button
+    const copyBtn = document.getElementById('copy-link-btn');
+    copyBtn?.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(fullUrl);
+        const originalHTML = copyBtn.innerHTML;
+        copyBtn.innerHTML = '<svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg> Copied!';
+        copyBtn.classList.add('text-green-600');
+        setTimeout(() => {
+          copyBtn.innerHTML = originalHTML;
+          copyBtn.classList.remove('text-green-600');
+        }, 2000);
+      } catch {
+        // Fallback for older browsers
+        const textArea = document.createElement('textarea');
+        textArea.value = fullUrl;
+        document.body.appendChild(textArea);
+        textArea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textArea);
+      }
+    });
+
+    // Hide mobile share bar when near bottom (to not overlap footer)
+    const shareBar = document.getElementById('mobile-share-bar');
+    const footer = document.querySelector('footer');
+    if (shareBar && footer) {
+      const observer = new IntersectionObserver(
+        ([entry]) => {
+          shareBar.style.display = entry.isIntersecting ? 'none' : 'flex';
+        },
+        { threshold: 0.1 }
+      );
+      observer.observe(footer);
+    }
+  </script>
 </BaseLayout>

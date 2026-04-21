@@ -15,38 +15,38 @@ const shareLinks = [
     name: 'Twitter',
     href: `https://twitter.com/intent/tweet?text=${encodedTitle}&url=${encodedUrl}`,
     icon: 'twitter',
-    color: 'hover:bg-[#1DA1F2] hover:text-white',
+    color: 'hover:bg-[#1DA1F2] active:bg-[#1DA1F2] hover:text-white active:text-white',
   },
   {
     name: 'Facebook',
     href: `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`,
     icon: 'facebook',
-    color: 'hover:bg-[#1877F2] hover:text-white',
+    color: 'hover:bg-[#1877F2] active:bg-[#1877F2] hover:text-white active:text-white',
   },
   {
     name: 'LinkedIn',
     href: `https://www.linkedin.com/shareArticle?mini=true&url=${encodedUrl}&title=${encodedTitle}`,
     icon: 'linkedin',
-    color: 'hover:bg-[#0A66C2] hover:text-white',
+    color: 'hover:bg-[#0A66C2] active:bg-[#0A66C2] hover:text-white active:text-white',
   },
   {
     name: 'WhatsApp',
     href: `https://wa.me/?text=${encodedTitle}%20${encodedUrl}`,
     icon: 'whatsapp',
-    color: 'hover:bg-[#25D366] hover:text-white',
+    color: 'hover:bg-[#25D366] active:bg-[#25D366] hover:text-white active:text-white',
   },
 ];
 ---
 
-<div class="flex items-center gap-3" id="social-share">
+<div class="flex items-center gap-2 sm:gap-3 flex-wrap" id="social-share">
   <span class="text-sm font-semibold text-surface-700">Share:</span>
-  <div class="flex gap-2">
+  <div class="flex gap-1.5 sm:gap-2">
     {shareLinks.map((link) => (
       <a
         href={link.href}
         target="_blank"
         rel="noopener noreferrer"
-        class={`w-9 h-9 rounded-lg bg-surface-100 text-surface-600 flex items-center justify-center transition-all duration-200 ${link.color}`}
+        class={`w-10 h-10 sm:w-9 sm:h-9 rounded-lg bg-surface-100 text-surface-600 flex items-center justify-center transition-all duration-200 ${link.color}`}
         aria-label={`Share on ${link.name}`}
         id={`share-${link.icon}`}
       >
