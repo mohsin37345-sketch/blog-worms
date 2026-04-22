@@ -26,7 +26,7 @@ const categoryClasses: Record<string, string> = {
 };
 ---
 
-<article class={`card group ${featured ? 'sm:col-span-2 lg:col-span-2' : ''}`}>
+<article class={`card group`}>
   <a href={`/blog/${slug}/`} class="block min-h-[44px]" id={`blog-card-${slug}`}>
     <!-- Image — 16:10 on mobile, wider on featured -->
     <div class={`relative overflow-hidden ${featured ? 'aspect-[16/10] sm:aspect-[21/9]' : 'aspect-[16/10]'}`}>
