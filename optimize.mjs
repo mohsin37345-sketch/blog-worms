@@ -15,6 +15,11 @@ async function run() {
       .resize(800)
       .webp({ quality: 80 })
       .toFile('public/images/john-ternus-apple-ceo.webp');
+
+    await sharp('public/images/london-tube-strikes-2026.png')
+      .resize(800)
+      .webp({ quality: 80 })
+      .toFile('public/images/london-tube-strikes-2026.webp');
     console.log('Images optimized!');
   } catch (e) {
     console.error('Sharp not found or error:', e);
