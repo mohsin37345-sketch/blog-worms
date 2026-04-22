@@ -65,6 +65,15 @@ const isRtl = lang === 'ar';
     <SchemaOrg type={s.type} data={s.data} />
   ))}
 
+  <!-- Google tag (gtag.js) -->
+  <script is:inline async src="https://www.googletagmanager.com/gtag/js?id=G-XL9NN31NRG"></script>
+  <script is:inline>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-XL9NN31NRG');
+  </script>
+
   <!-- AdSense Slot (add your code after approval) -->
   <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXX" crossorigin="anonymous"></script> -->
 </head>
