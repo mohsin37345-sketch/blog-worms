@@ -2,7 +2,7 @@
 import BlogCard from './BlogCard.astro';
 
 interface BlogPost {
-  slug: string;
+  id: string;
   data: {
     title: string;
     description: string;
@@ -42,7 +42,7 @@ const { posts, title, showAll = false } = Astro.props;
 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
   {posts.map((post) => (
     <BlogCard
-      slug={post.slug}
+      slug={post.id}
       title={post.data.title}
       description={post.data.description}
       image={post.data.image}
