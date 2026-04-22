@@ -65,6 +65,23 @@ const isRtl = lang === 'ar';
     <SchemaOrg type={s.type} data={s.data} />
   ))}
 
+  <!-- Google Consent Mode v2 defaults (must load before any Google tags) -->
+  <script is:inline>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('consent', 'default', {
+      'ad_storage': 'denied',
+      'ad_user_data': 'denied',
+      'ad_personalization': 'denied',
+      'analytics_storage': 'denied',
+      'wait_for_update': 500
+    });
+  </script>
+
+  <!-- Start CookieYes banner -->
+  <script is:inline id="cookieyes" type="text/javascript" src="https://cdn-cookieyes.com/client_data/ecfe724b816f38b098d30a0beb6a3d5a/script.js"></script>
+  <!-- End CookieYes banner -->
+
   <!-- Google tag (gtag.js) -->
   <script is:inline async src="https://www.googletagmanager.com/gtag/js?id=G-XL9NN31NRG"></script>
   <script is:inline>
