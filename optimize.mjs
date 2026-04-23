@@ -30,6 +30,11 @@ async function run() {
       .resize(800)
       .webp({ quality: 80 })
       .toFile('public/images/morrisons-store-closures-2026.webp');
+
+    await sharp('public/images/claudia-doumit-biography.png')
+      .resize(800)
+      .webp({ quality: 80 })
+      .toFile('public/images/claudia-doumit-biography.webp');
     console.log('Images optimized!');
   } catch (e) {
     console.error('Sharp not found or error:', e);
