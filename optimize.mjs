@@ -35,6 +35,11 @@ async function run() {
       .resize(800)
       .webp({ quality: 80 })
       .toFile('public/images/claudia-doumit-biography.webp');
+
+    await sharp('public/images/invincible-season-5-release-date.png')
+      .resize(800)
+      .webp({ quality: 80 })
+      .toFile('public/images/invincible-season-5-release-date.webp');
     console.log('Images optimized!');
   } catch (e) {
     console.error('Sharp not found or error:', e);
