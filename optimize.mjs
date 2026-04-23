@@ -25,6 +25,11 @@ async function run() {
       .resize(800)
       .webp({ quality: 80 })
       .toFile('public/images/beverley-callard-illness-im-a-celebrity.webp');
+
+    await sharp('public/images/morrisons-store-closures-2026.png')
+      .resize(800)
+      .webp({ quality: 80 })
+      .toFile('public/images/morrisons-store-closures-2026.webp');
     console.log('Images optimized!');
   } catch (e) {
     console.error('Sharp not found or error:', e);
