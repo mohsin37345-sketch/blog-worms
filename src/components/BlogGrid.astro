@@ -1,5 +1,6 @@
 ---
 import BlogCard from './BlogCard.astro';
+import { getLangFromUrl, useTranslations, getLocalePath } from '@/i18n/utils';
 
 interface BlogPost {
   id: string;
@@ -22,14 +23,17 @@ interface Props {
 }
 
 const { posts, title, showAll = false } = Astro.props;
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
 ---
 
 {title && (
   <div class="flex items-center justify-between mb-6 sm:mb-8">
     <h2 class="text-xl sm:text-2xl md:text-3xl font-bold text-surface-900">{title}</h2>
     {showAll && (
-      <a href="/blog/" class="text-sm font-semibold text-primary-600 active:text-primary-700 flex items-center gap-1 transition-colors min-h-[44px] px-2">
-        View All
+      <a href={getLocalePath(lang, '/blog/')} class="text-sm font-semibold text-primary-600 active:text-primary-700 flex items-center gap-1 transition-colors min-h-[44px] px-2">
+        {t('general.viewAll')}
         <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
           <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
         </svg>

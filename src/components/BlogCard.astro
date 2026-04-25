@@ -1,4 +1,6 @@
 ---
+import { getLangFromUrl, useTranslations, getLocalePath } from '@/i18n/utils';
+
 interface Props {
   image: string;
   imageAlt?: string;
@@ -13,7 +15,10 @@ interface Props {
 
 const { image, imageAlt = '', title, description, date, category, slug, author = 'Blog Worms Team', featured = false } = Astro.props;
 
-const formattedDate = new Date(date).toLocaleDateString('en-GB', {
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+
+const formattedDate = new Date(date).toLocaleDateString(lang === 'en' ? 'en-GB' : lang, {
   day: 'numeric',
   month: 'short',
   year: 'numeric',
@@ -24,10 +29,13 @@ const categoryClasses: Record<string, string> = {
   guides: 'badge-guides',
   questions: 'badge-questions',
 };
+
+// Find category translation name if needed (matching by slug in Categories)
+const displayCategory = category; // Could be translated if mapped, but keeping simple
 ---
 
 <article class="card group h-full">
-  <a href={`/blog/${slug}/`} class="flex flex-col h-full" id={`blog-card-${slug}`}>
+  <a href={getLocalePath(lang, `/blog/${slug}/`)} class="flex flex-col h-full" id={`blog-card-${slug}`}>
     <!-- Image — Fixed 16:9 aspect ratio for all cards -->
     <div class="relative overflow-hidden aspect-[16/9] flex-shrink-0">
       <img
@@ -58,15 +66,15 @@ const categoryClasses: Record<string, string> = {
       </div>
 
       <h3 class="font-bold text-surface-900 mb-2 group-hover:text-primary-600 transition-colors line-clamp-2 text-base sm:text-lg">
-        {title}
+        {t(`post.${slug}.title` as any) || title}
       </h3>
 
       <p class="text-sm text-surface-600 line-clamp-2 mb-3 sm:mb-4 leading-relaxed flex-grow">
-        {description}
+        {t(`post.${slug}.desc` as any) || description}
       </p>
 
       <span class="inline-flex items-center gap-1.5 text-sm font-semibold text-primary-600 group-hover:gap-2.5 transition-all py-1 mt-auto">
-        Read More
+        {t('blog.readMore')}
         <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
           <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
         </svg>

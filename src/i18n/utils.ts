@@ -10,8 +10,9 @@ export function getLangFromUrl(url: URL): Lang {
 }
 
 export function useTranslations(lang: Lang) {
-  return function t(key: TranslationKey): string {
-    const translation = ui[lang]?.[key] ?? ui[defaultLang][key];
+  return function t(key: TranslationKey | string): string | undefined {
+    const translation = (ui[lang] as any)?.[key] ?? (ui[defaultLang] as any)?.[key];
+    if (translation === undefined) return undefined;
     return translation.replace('{year}', new Date().getFullYear().toString());
   };
 }
