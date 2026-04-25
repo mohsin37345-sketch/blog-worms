@@ -1,10 +1,7 @@
 ---
 import { NAV_LINKS, SITE } from '@/data/site';
-import LanguageSwitcher from './LanguageSwitcher.astro';
-
 const currentPath = Astro.url.pathname;
 ---
-
 <header class="sticky top-0 z-50 bg-white/90 backdrop-blur-lg border-b border-surface-200/50 safe-top" id="site-header">
   <nav class="container-blog flex items-center justify-between h-14 md:h-16" aria-label="Main navigation">
     <!-- Logo -->
@@ -36,7 +33,6 @@ const currentPath = Astro.url.pathname;
           {link.label}
         </a>
       ))}
-      <LanguageSwitcher />
     </div>
 
     <!-- Mobile Menu Button — 48x48 touch target -->
@@ -82,12 +78,6 @@ const currentPath = Astro.url.pathname;
 
     <!-- Divider -->
     <div class="border-t border-surface-200 my-4 !mt-6"></div>
-
-    <!-- Language Selector in mobile menu -->
-    <div class="px-4 pt-2">
-      <p class="text-xs font-semibold text-surface-400 uppercase tracking-wider mb-3">Language</p>
-      <LanguageSwitcher />
-    </div>
   </div>
 </div>
 

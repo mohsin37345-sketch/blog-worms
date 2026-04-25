@@ -17,25 +17,8 @@ export default defineConfig({
       changefreq: 'weekly',
       priority: 0.7,
       lastmod: new Date(),
-      i18n: {
-        defaultLocale: 'en',
-        locales: {
-          en: 'en-GB',
-          es: 'es-ES',
-          fr: 'fr-FR',
-          de: 'de-DE',
-          ar: 'ar-SA',
-        },
-      },
     }),
   ],
-  i18n: {
-    defaultLocale: 'en',
-    locales: ['en', 'es', 'fr', 'de', 'ar'],
-    routing: {
-      prefixDefaultLocale: false,
-    },
-  },
   redirects: {
     '/blog/eurofighter-typhoon-cost-price': '/blog/eurofighter-typhoon-cost-generation-countries-comparison',
     '/blog/eurofighter-typhoon-generation-4th-5th': '/blog/eurofighter-typhoon-cost-generation-countries-comparison',

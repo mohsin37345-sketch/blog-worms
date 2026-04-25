@@ -1,0 +1,58 @@
+---
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const locales = ['es', 'fr', 'de', 'ar'] as const;
+  
+  // All English posts
+  const posts = await getCollection('blog');
+  
+  // Standard pages
+  const pages = [
+    undefined, // for /es/ or /fr/ root
+    'about-us',
+    'contact-us',
+    'disclaimer',
+    'privacy',
+    'terms'
+  ];
+
+  // blog list pages
+  const blogPages = [
+    'blog',
+    'blog/2',
+    'blog/3' // assuming up to 3 pages of pagination based on current post count
+  ];
+
+  const paths = [];
+  for (const lang of locales) {
+    for (const page of pages) {
+      paths.push({ params: { lang, slug: page } });
+    }
+    for (const bp of blogPages) {
+      paths.push({ params: { lang, slug: bp } });
+    }
+    for (const post of posts) {
+      paths.push({ params: { lang, slug: `blog/${post.id}` } });
+    }
+  }
+
+  return paths;
+}
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="robots" content="noindex" />
+    <meta http-equiv="refresh" content={`0;url=/`} />
+    <title>Redirecting...</title>
+    <script>
+      window.location.href = '/';
+    </script>
+  </head>
+  <body>
+    <p>Redirecting to <a href="/">the homepage</a>...</p>
+  </body>
+</html>
