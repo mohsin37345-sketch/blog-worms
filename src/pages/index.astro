@@ -11,7 +11,7 @@ import { getCollection } from 'astro:content';
 const allPosts = await getCollection('blog', ({ data }) => !data.draft);
 const latestPosts = allPosts
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
-  .slice(0, 6);
+  .slice(3, 9);
 
 const homeFaqs = [
   {

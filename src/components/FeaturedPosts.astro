@@ -7,15 +7,9 @@ const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 
 const allPosts = await getCollection('blog', ({ data }) => !data.draft);
-const featuredPosts = allPosts
-  .filter((post) => post.data.featured)
+const displayPosts = allPosts
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
   .slice(0, 3);
-
-// If not enough featured, fill from latest
-const displayPosts = featuredPosts.length >= 1
-  ? featuredPosts
-  : allPosts.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf()).slice(0, 3);
 ---
 
 {displayPosts.length > 0 && (
