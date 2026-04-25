@@ -1,7 +1,7 @@
 ---
 import PageLayout from '@/layouts/PageLayout.astro';
 import { getCollection } from 'astro:content';
-import { NAV_LINKS, LEGAL_LINKS, CATEGORIES } from '@/data/site';
+import { NAV_LINKS, LEGAL_LINKS } from '@/data/site';
 
 const allPosts = await getCollection('blog', ({ data }) => !data.draft);
 const sortedPosts = allPosts.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
@@ -51,22 +51,7 @@ const sortedPosts = allPosts.sort((a, b) => b.data.date.valueOf() - a.data.date.
       </ul>
     </div>
 
-    <!-- Categories -->
-    <div>
-      <h2 class="text-xl font-bold text-surface-900 mb-4 flex items-center gap-2">
-        <span class="w-2 h-2 bg-green-500 rounded-full"></span>
-        Categories
-      </h2>
-      <ul class="space-y-2">
-        {CATEGORIES.map((cat) => (
-          <li>
-            <a href={`/blog/?category=${cat.slug}`} class="text-primary-600 hover:text-primary-700 hover:underline">
-              {cat.icon} {cat.name}
-            </a>
-          </li>
-        ))}
-      </ul>
-    </div>
+
 
     <!-- Blog Posts -->
     <div class="md:col-span-2">
