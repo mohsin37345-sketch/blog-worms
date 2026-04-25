@@ -3,7 +3,6 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
 import Hero from '@/components/Hero.astro';
 import FeaturedPosts from '@/components/FeaturedPosts.astro';
 import BlogGrid from '@/components/BlogGrid.astro';
-import Categories from '@/components/Categories.astro';
 import WhyBlogWorms from '@/components/WhyBlogWorms.astro';
 import FAQ from '@/components/FAQ.astro';
 import { getCollection } from 'astro:content';
@@ -69,8 +68,6 @@ const faqSchema = {
     </div>
   </section>
 
-  <!-- Categories -->
-  <Categories />
 
   <!-- Why Blog Worms -->
   <WhyBlogWorms />
