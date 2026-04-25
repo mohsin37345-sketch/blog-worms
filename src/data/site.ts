@@ -29,30 +29,4 @@ export const SOCIAL_LINKS = [
   { label: 'YouTube', href: 'https://www.youtube.com/@blogwormsuk', icon: 'youtube' },
 ] as const;
 
-export const CATEGORIES = [
-  {
-    name: 'Trending',
-    slug: 'trending',
-    description: 'The hottest topics breaking across the UK right now',
-    icon: '🔥',
-    color: 'badge-trending',
-  },
-  {
-    name: 'Guides',
-    slug: 'guides',
-    description: 'In-depth guides and how-to articles on popular subjects',
-    icon: '📚',
-    color: 'badge-guides',
-  },
-  {
-    name: 'Questions',
-    slug: 'questions',
-    description: 'Answers to the questions Google hasn\'t answered yet',
-    icon: '❓',
-    color: 'badge-questions',
-  },
-] as const;
-
 export const POSTS_PER_PAGE = 12;
-
-export type Category = typeof CATEGORIES[number]['slug'];

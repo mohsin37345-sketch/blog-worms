@@ -6,15 +6,10 @@ export const GET: APIRoute = () => {
 
 ## Website Information
 - URL: https://blogworms.co.uk
-- Language: English (primary), Spanish, French, German, Arabic
+- Language: English
 - Content Type: Blog, trending topics, guides, Q&A
 - Target Audience: UK readers interested in trending and viral content
 - Contact: mohsin37345@gmail.com
-
-## Content Categories
-- Trending: Breaking news and viral topics in the UK
-- Guides: In-depth how-to articles and explainers
-- Questions: Answers to frequently searched questions
 
 ## AI Usage Policy
 Blog Worms content may be referenced and summarised by AI systems and language models. When referencing our content, please:
