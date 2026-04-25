@@ -36,6 +36,18 @@ export default defineConfig({
       prefixDefaultLocale: false,
     },
   },
+  redirects: {
+    '/blog/eurofighter-typhoon-cost-price': '/blog/eurofighter-typhoon-cost-generation-countries-comparison',
+    '/blog/eurofighter-typhoon-generation-4th-5th': '/blog/eurofighter-typhoon-cost-generation-countries-comparison',
+    '/blog/eurofighter-typhoon-model-variants': '/blog/eurofighter-typhoon-cost-generation-countries-comparison',
+    '/blog/eurofighter-typhoon-operators-countries': '/blog/eurofighter-typhoon-cost-generation-countries-comparison',
+    '/blog/eurofighter-typhoon-specs-speed-range-weapons': '/blog/eurofighter-typhoon-cost-generation-countries-comparison',
+    '/blog/eurofighter-typhoon-vs-f-16': '/blog/eurofighter-typhoon-cost-generation-countries-comparison',
+    '/blog/eurofighter-typhoon-vs-f-35': '/blog/eurofighter-typhoon-cost-generation-countries-comparison',
+    '/blog/eurofighter-typhoon-vs-gripen': '/blog/eurofighter-typhoon-cost-generation-countries-comparison',
+    '/blog/eurofighter-typhoon-vs-rafale': '/blog/eurofighter-typhoon-cost-generation-countries-comparison',
+    '/blog/eurofighter-typhoon-which-country-built-it': '/blog/eurofighter-typhoon-cost-generation-countries-comparison',
+  },
   vite: {
     plugins: [tailwindcss()],
   },
