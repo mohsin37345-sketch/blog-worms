@@ -1,0 +1,209 @@
+---
+// UsernameGenerator.astro — Respectful nature-inspired username generator
+---
+
+<div class="username-generator" id="username-generator">
+  <div class="ug-controls">
+    <div class="ug-row">
+      <label for="ug-platform">Platform</label>
+      <select id="ug-platform">
+        <option value="instagram">Instagram</option>
+        <option value="tiktok">TikTok</option>
+        <option value="gaming">Gaming</option>
+        <option value="youtube">YouTube</option>
+        <option value="x">X (Twitter)</option>
+      </select>
+    </div>
+    <div class="ug-row">
+      <label for="ug-style">Style</label>
+      <select id="ug-style">
+        <option value="soft">Soft</option>
+        <option value="bold">Bold</option>
+        <option value="minimal">Minimal</option>
+        <option value="cute">Cute</option>
+        <option value="nature">Nature</option>
+        <option value="oneword">One-word</option>
+      </select>
+    </div>
+    <div class="ug-row">
+      <label for="ug-length">Length</label>
+      <select id="ug-length">
+        <option value="short">Short (≤12 chars)</option>
+        <option value="medium" selected>Medium (13–20 chars)</option>
+        <option value="long">Long (21+ chars)</option>
+      </select>
+    </div>
+    <div class="ug-row">
+      <label for="ug-sep">Separator</label>
+      <select id="ug-sep">
+        <option value="none">None</option>
+        <option value="dot">Dot (.)</option>
+        <option value="underscore">Underscore (_)</option>
+      </select>
+    </div>
+    <button id="ug-btn" type="button">Generate 20 safe usernames</button>
+  </div>
+  <div class="ug-note">These are English nature-inspired words. They are not Native American names, tribal-language translations or sacred terms.</div>
+  <div id="ug-results" class="ug-results"></div>
+</div>
+
+<style>
+  .username-generator {
+    background: #f8faf8;
+    border: 1px solid #d4ddd4;
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+  }
+  .ug-controls {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+  }
+  @media (max-width: 600px) {
+    .ug-controls { grid-template-columns: 1fr; }
+  }
+  .ug-row {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+  .ug-row label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #334;
+  }
+  .ug-row select {
+    padding: 0.5rem 0.75rem;
+    border: 1px solid #ccd;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    background: #fff;
+    color: #223;
+  }
+  #ug-btn {
+    grid-column: 1 / -1;
+    margin-top: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    background: #2d6a4f;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  #ug-btn:hover { background: #1b4332; }
+  .ug-note {
+    margin-top: 0.75rem;
+    font-size: 0.8rem;
+    color: #667;
+    font-style: italic;
+  }
+  .ug-results {
+    margin-top: 1rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.4rem;
+  }
+  @media (max-width: 600px) {
+    .ug-results { grid-template-columns: 1fr; }
+  }
+  .ug-item {
+    background: #fff;
+    border: 1px solid #e0e6e0;
+    border-radius: 6px;
+    padding: 0.5rem 0.75rem;
+    font-family: 'Courier New', monospace;
+    font-size: 0.9rem;
+    color: #2d4a3e;
+    cursor: pointer;
+    transition: background 0.15s;
+    user-select: all;
+  }
+  .ug-item:hover { background: #eef5ee; }
+  .ug-copied {
+    background: #d4edda !important;
+    border-color: #2d6a4f !important;
+  }
+</style>
+
+<script>
+  const nature = ['river','cedar','pine','moss','stone','meadow','frost','rain','sky','dawn','fern','oak','birch','brook','trail','creek','ridge','lake','bloom','leaf','willow','maple','aspen','dusk','mist','cliff','shore','vale','glen','heath','marsh','thorn','briar','elm','ivy','sage','laurel','hazel','wren','lark','finch','heron','dove','ember','flint','pebble','dune','cove','peak','field'];
+  const mood = ['quiet','soft','calm','bright','deep','steady','warm','clear','gentle','still','pale','wild','silver','golden','lone','true','faint','hush','mild','cool'];
+  const strong = ['flint','ridge','ember','iron','thunder','north','storm','granite','steel','bold','swift','sharp','brave','stark','forge','blaze','crest','summit','grit','apex'];
+  const cute = ['tiny','little','small','baby','wee','mini','sweet','bitty','dear','dainty'];
+  const cuteNouns = ['fern','leaf','bud','bloom','petal','acorn','berry','dewdrop','pebble','seedling','sprout','duckling','fawn','bunny','robin','sparrow','firefly','ladybird','clover','daisy'];
+
+  function pick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+  function cap(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
+
+  function generate() {
+    const platform = (document.getElementById('ug-platform') as HTMLSelectElement).value;
+    const style = (document.getElementById('ug-style') as HTMLSelectElement).value;
+    const length = (document.getElementById('ug-length') as HTMLSelectElement).value;
+    const sep = (document.getElementById('ug-sep') as HTMLSelectElement).value;
+
+    const sepChar = sep === 'dot' ? '.' : sep === 'underscore' ? '_' : '';
+    const useLower = platform === 'instagram' || platform === 'tiktok';
+    const results: string[] = [];
+    let attempts = 0;
+
+    while (results.length < 20 && attempts < 200) {
+      attempts++;
+      let name = '';
+
+      if (style === 'soft') {
+        name = pick(mood) + sepChar + pick(nature);
+      } else if (style === 'bold') {
+        name = pick(strong) + sepChar + pick(nature);
+      } else if (style === 'minimal') {
+        name = pick(nature) + (Math.random() > 0.5 ? sepChar + pick(mood) : '');
+      } else if (style === 'cute') {
+        name = pick(cute) + sepChar + pick(cuteNouns);
+      } else if (style === 'nature') {
+        name = pick(nature) + sepChar + pick(nature);
+      } else if (style === 'oneword') {
+        name = pick([...nature, ...strong]);
+      }
+
+      // Apply casing
+      if (useLower) {
+        name = name.toLowerCase();
+      } else {
+        // PascalCase for gaming/youtube/x
+        const parts = name.split(sepChar || /(?=[A-Z])/);
+        name = parts.map(p => cap(p.toLowerCase())).join(sepChar);
+      }
+
+      // Trailing separator for Instagram/TikTok feel
+      if (useLower && sep === 'underscore' && Math.random() > 0.6) {
+        name = name + '_';
+      }
+
+      // Length filter
+      const len = name.replace(/[._]/g, '').length;
+      if (length === 'short' && len > 12) continue;
+      if (length === 'medium' && (len < 8 || len > 20)) continue;
+      if (length === 'long' && len < 16) continue;
+
+      if (!results.includes(name)) results.push(name);
+    }
+
+    const container = document.getElementById('ug-results')!;
+    container.innerHTML = results.map(r =>
+      `<div class="ug-item" title="Click to copy">${r}</div>`
+    ).join('');
+
+    container.querySelectorAll('.ug-item').forEach(el => {
+      el.addEventListener('click', () => {
+        navigator.clipboard.writeText(el.textContent || '');
+        el.classList.add('ug-copied');
+        setTimeout(() => el.classList.remove('ug-copied'), 1000);
+      });
+    });
+  }
+
+  document.getElementById('ug-btn')?.addEventListener('click', generate);
+</script>
