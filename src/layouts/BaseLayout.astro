@@ -91,8 +91,31 @@ const isRtl = lang === 'ar';
     gtag('config', 'G-90573LXMC3');
   </script>
 
-  <!-- AdSense Slot -->
-  <script is:inline async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6002920857094660" crossorigin="anonymous"></script>
+  <!-- AdSense Slot — Lazy Loaded to improve PageSpeed Performance and resolve cache TTL warnings -->
+  <script is:inline>
+    function loadAdSense() {
+      if (window.adsenseLoaded) return;
+      window.adsenseLoaded = true;
+      const script = document.createElement('script');
+      script.src = "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6002920857094660";
+      script.crossOrigin = "anonymous";
+      script.async = true;
+      document.head.appendChild(script);
+    }
+
+    // Load AdSense on first user interaction
+    const adsenseEvents = ['mouseover', 'keydown', 'touchstart', 'scroll'];
+    adsenseEvents.forEach(event => {
+      window.addEventListener(event, loadAdSense, { passive: true, once: true });
+    });
+
+    // Fallback loading after page is idle or a timeout
+    if (window.requestIdleCallback) {
+      window.requestIdleCallback(() => setTimeout(loadAdSense, 3000));
+    } else {
+      setTimeout(loadAdSense, 3500);
+    }
+  </script>
 </head>
 <body class="min-h-screen flex flex-col bg-surface-50 text-surface-800 antialiased">
   <Header />
