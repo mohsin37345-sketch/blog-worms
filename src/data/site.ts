@@ -1,7 +1,7 @@
 export const SITE = {
   name: 'Blog Worms',
   description: 'Your go-to source for the latest viral and trending blogs in the UK. We cover trending topics, unanswered questions, and viral content that matters.',
-  url: 'https://blogworms.co.uk',
+  url: 'https://www.blogworms.co.uk',
   author: 'Blog Worms Team',
   email: 'mohsin37345@gmail.com',
   locale: 'en-GB',

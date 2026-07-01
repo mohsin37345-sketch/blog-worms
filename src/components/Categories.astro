@@ -1,21 +1,17 @@
 ---
 import { CATEGORIES } from '@/data/site';
-import { getLangFromUrl, useTranslations } from '@/i18n/utils';
-
-const lang = getLangFromUrl(Astro.url);
-const t = useTranslations(lang);
 ---
 
 <section class="section section-alt" id="categories-section">
   <div class="container-blog">
     <div class="text-center mb-10">
-      <h2 class="text-2xl md:text-3xl font-bold text-surface-900">{t('home.categories')}</h2>
+      <h2 class="text-2xl md:text-3xl font-bold text-surface-900">Browse by Category</h2>
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
-      {CATEGORIES.map((cat, index) => (
+      {CATEGORIES.map((cat) => (
         <a
-          href={`/${lang}/blog/?category=${cat.slug}`}
+          href={`/blog/?category=${cat.slug}`}
           class="card group p-8 text-center hover:border-primary-200 border-2 border-transparent transition-all"
           id={`category-${cat.slug}`}
         >
@@ -23,10 +19,10 @@ const t = useTranslations(lang);
             {cat.icon}
           </div>
           <h3 class="text-xl font-bold text-surface-900 mb-2 group-hover:text-primary-600 transition-colors">
-            {t(`cat.${index}.name` as any) || cat.name}
+            {cat.name}
           </h3>
           <p class="text-sm text-surface-600 leading-relaxed">
-            {t(`cat.${index}.desc` as any) || cat.description}
+            {cat.description}
           </p>
         </a>
       ))}

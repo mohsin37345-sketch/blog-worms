@@ -1,7 +1,7 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://blogworms.co.uk/sitemap-index.xml
+Sitemap: https://www.blogworms.co.uk/sitemap-index.xml
 
 # Blog Worms - UK Trending & Viral Content Blog
-# https://blogworms.co.uk
+# https://www.blogworms.co.uk
