@@ -9,6 +9,7 @@ import SchemaOrg from '@/components/SchemaOrg.astro';
 
 interface Props {
   title: string;
+  seoTitle?: string;
   description: string;
   image: string;
   imageAlt?: string;
@@ -24,6 +25,7 @@ interface Props {
 
 const {
   title,
+  seoTitle,
   description,
   image,
   imageAlt = '',
@@ -97,7 +99,7 @@ const encodedTitle = encodeURIComponent(title);
 ---
 
 <BaseLayout
-  title={`${title} | Blog Worms`}
+  title={`${seoTitle || title} | Blog Worms`}
   description={description}
   image={image}
   type="article"
